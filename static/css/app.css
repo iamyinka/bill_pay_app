@@ -1,0 +1,90 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100vh;
+  /* font-family: "Inter", sans-serif; */
+  font-family: "PT Sans", sans-serif;
+  font-size: 16px;
+  /* overflow-y: hidden; */
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 2rem;
+}
+
+p {
+  font-size: 1.2rem;
+}
+
+#login-view__left,
+#login-view__right {
+  background: linear-gradient(to right, rgba(10, 10, 10, 0.65), rgba(28, 10, 15, 0.75), rgba(10, 10, 10, 0.56)), url("https://realtybaguio.com/wp-content/uploads/2021/04/sunroom-1200x1000.png");
+  background-size: cover;
+  background-position: center center;
+  height: 100vh;
+  position: relative;
+  color: rgba(245, 245, 255, 0.87);
+}
+
+#login-view__left {
+  /* animation: animateLoginPage 5s ease-in 0s infinite alternate forwards; */
+}
+
+#login-view__right {
+  background: #0d1b2a;
+  height: 100vh;
+}
+
+h1 {
+  font-size: 3rem;
+  font-family: "Lobster", cursive;
+  text-align: center;
+}
+
+.login-view {
+  /* height: 100vh; */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -30%);
+}
+
+#login-view__bg {
+  width: 100%;
+}
+
+.login-view p {
+  text-align: center;
+}
+
+.login-view p small {
+  font-size: 0.85rem;
+}
+
+#paymentSection {
+  display: none;
+  /* margin: 5rem 0; */
+}
+
+.fa-icon {
+  font-size: 8rem;
+  text-align: center;
+}
+
+@keyframes animateLoginPage {
+  from {
+    transform: scale(1.2);
+  }
+  to {
+    transform: scale(1);
+  }
+}
