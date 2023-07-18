@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+import dj_database_url
 
 load_dotenv()
 
@@ -29,7 +30,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
 
     # Third-party Apps
     'widget_tweaks',
+     "corsheaders",
 
     # Local Apps
     'pages',
@@ -52,7 +54,9 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -84,13 +88,27 @@ WSGI_APPLICATION = 'bill_pay_proj.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
+
+
+
+# Database
+# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+
+if not DEBUG:
+    DATABASES = {
+    'default': dj_database_url.config( 
+        # Feel free to alter this value to suit your needs.        
+        default='postgresql://postgres:postgres@localhost:5432/bill_pay_proj',        
+        conn_max_age=600    
+        )
+    }
+else:
+    DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -126,13 +144,65 @@ LOGIN_URL = 'login/'
 
 LOGIN_REDIRECT_URL = '/'
 
+# CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ALLOW_CREDENTIALS = True
+
+# CORS_ALLOW_HEADERS = (
+#     'accept',
+#     'accept-encoding',
+#     'authorization',
+#     'content-type',
+#     'dnt',
+#     'origin',
+#     'user-agent',
+#     'x-csrftoken',
+#     'x-requested-with',
+# )
+
+# CORS_ALLOW_METHODS = (
+#     "GET",
+#     "POST",
+# )
+
+# CORS_REPLACE_HTTPS_REFERER = True
+
+# CORS_ORIGIN_WHITELIST = ("http://localhost:8000",
+#     "https://checkout.flutterwave.com",
+#     "https://flutterwave.com")
+
+# CSRF_TRUSTED_ORIGINS = [
+#     "http://localhost:8000",
+#     "https://checkout.flutterwave.com",
+#     "https://flutterwave.com"
+# ]
+
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:8000",
+#     "https://checkout.flutterwave.com",
+#     "https://flutterwave.com"
+# ]
+
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_SSL_REDIRECT = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
 
-STATICFILES_DIRS = [BASE_DIR / 'static/']
+
+
+# Following settings only make sense on production and may break development environments.
+if not DEBUG:    # Tell Django to copy statics to the `staticfiles` directory
+    # in your application directory on Render.
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    # Turn on WhiteNoise storage backend that takes care of compressing static files
+    # and creating unique names for each version so they can safely be cached forever.
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+else:
+    STATICFILES_DIRS = [BASE_DIR / 'static/']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
