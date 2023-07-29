@@ -113,10 +113,7 @@
             <form action="" method="post">
                 {% csrf_token %}
                 <h6>Make a Payment</h6>
-                <input type="hidden" name="public_key" value="{{ public_key }}" id="public_key" />
-                <input type="hidden" name="customer[email]" value="{{ request.user.email }}" id="customer_email" />
-                <input type="hidden" name="customer[name]" value="{{ request.user.get_full_name }}" id="customer_name" />
-                <input type="hidden" name="tx_ref" value="{{ tx_ref }}" id="tx_ref" />
+                
                 <input type="hidden" name="redirect_url"
                     value="{{ site_url }}" id="redirect_url" />
                 <input type="hidden" name="currency" value="NGN" />

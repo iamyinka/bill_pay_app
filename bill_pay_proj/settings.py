@@ -96,12 +96,15 @@ WSGI_APPLICATION = 'bill_pay_proj.wsgi.application'
 
 if not DEBUG:
     DATABASES = {
-    'default': dj_database_url.config( 
-        # Feel free to alter this value to suit your needs.        
-        default='postgresql://postgres:postgres@localhost:5432/bill_pay_proj',        
-        conn_max_age=600    
-        )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'home_bill',
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PWD'),
+        'HOST': 'localhost',
+        'PORT': '',
     }
+}
 else:
     DATABASES = {
     'default': {
