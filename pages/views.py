@@ -4,7 +4,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from bills.models import Bill
-from .forms import ChangePwdForm
 from django.contrib.auth.models import User
 from bills.forms import BillForm
 from django.urls import reverse
@@ -40,7 +39,9 @@ def dashboard(request):
     trx_ref = gen_trx_ref()
     public_key = os.getenv('PUBLIC_KEY')
     # site_url = request.build_absolute_uri() + "payment-status/"
-    site_url = "https://iamyinka.github.io/residents_app/payment_status.html"
+    site_url = request.build_absolute_uri("payment-status/")
+
+    print(site_url)
     
     # bill_form.amount = int(bill_form.cleaned_data['amount'])
     # bill_form.user = request.user
@@ -94,12 +95,12 @@ def dashboard(request):
     return render(request, 'pages/dashboard.html', data)
 
 
-def payment_status(request, status, tx_ref, transaction_id=''):
+def payment_status(request, status, tx_ref, transaction_id):
 
     if tx_ref is not None and status is not None:
         tx = Bill.objects.get(tx_ref=tx_ref)
         tx.status = status
-        transaction_id = transaction_id
+        tx.tx_id = transaction_id
         tx.save()
     else:
         return redirect('dashboard')
