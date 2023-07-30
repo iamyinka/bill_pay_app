@@ -28,9 +28,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.getenv("DEBUG")
 
-ALLOWED_HOSTS = ['143.198.158.39']
+if not DEBUG:
+    ALLOWED_HOSTS = ['143.198.158.39']
+else:
+    ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -195,20 +198,16 @@ LOGIN_REDIRECT_URL = '/'
 
 STATIC_URL = 'static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-
-STATICFILES_DIRS = [BASE_DIR / 'static/']
-
 # Following settings only make sense on production and may break development environments.
-# if not DEBUG:    # Tell Django to copy statics to the `staticfiles` directory
-#     pass
-#     # in your application directory on Render.
-#     # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-#     # Turn on WhiteNoise storage backend that takes care of compressing static files
-#     # and creating unique names for each version so they can safely be cached forever.
-#     # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-# else:
-#     STATICFILES_DIRS = [BASE_DIR / 'static/']
+if not DEBUG:    # Tell Django to copy statics to the `staticfiles` directory
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+    # in your application directory on Render.
+    # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    # Turn on WhiteNoise storage backend that takes care of compressing static files
+    # and creating unique names for each version so they can safely be cached forever.
+    # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+else:
+    STATICFILES_DIRS = [BASE_DIR / 'static/']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
