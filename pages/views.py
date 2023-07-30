@@ -70,11 +70,12 @@ def dashboard(request):
 
         user_form = PasswordChangeForm(request.user, request.POST)
         if user_form.is_valid():
-             user = user_form.save()
-             update_session_auth_hash(request, user)  # Important!
+            user = user_form.save()
+            update_session_auth_hash(request, user)  # Important!
             #  messages.success(request, 'Your password was successfully updated!')
+            return redirect('dashboard')
         else:
-            print("Not valid")
+            return render(request, 'pages/dashboard.html', data)
 
 
             # redirect_url = request.build_absolute_uri()
