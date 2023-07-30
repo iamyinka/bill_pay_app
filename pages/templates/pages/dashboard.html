@@ -40,15 +40,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for bill in user_bills %}
-                                <tr>
-                                    {% comment %} <th scope="row">1</th> {% endcomment %}
-                                    <td>NGN {{ bill.amount }}</td>
-                                    <td>{{ bill.category|title }}</td>
-                                    <td>{{ bill.created|timesince }}</td>
-                                </tr>
-                            
-                            {% endfor %}
+                            {% if user_bills %}
+                                    {% for bill in user_bills %}
+                                    <tr>
+                                        {% comment %} <th scope="row">1</th> {% endcomment %}
+                                        <td>NGN {{ bill.amount }}</td>
+                                        <td>{{ bill.category|title }}</td>
+                                        <td>{{ bill.created|timesince }}</td>
+                                    </tr>
+                                
+                                {% endfor %}
+                            {% else %}
+                                    <p>Nothing to show...</p>
+                            {% endif %}
                             
                         </tbody>
                     </table>
