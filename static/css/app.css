@@ -70,7 +70,8 @@ h1 {
   font-size: 0.85rem;
 }
 
-#paymentSection {
+#paymentSection,
+#changePwdForm {
   display: none;
   /* margin: 5rem 0; */
 }

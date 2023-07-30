@@ -1,7 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 from bills.models import Bill
+from .forms import ChangePwdForm
+from django.contrib.auth.models import User
 from bills.forms import BillForm
 from django.urls import reverse
 
@@ -30,6 +34,8 @@ def form_to_checkout(request):
 
 @login_required()
 def dashboard(request):
+    user_bills = Bill.objects.filter(user=request.user)
+    user_form = PasswordChangeForm(user=request.user)
     bill_form = BillForm()
     trx_ref = gen_trx_ref()
     public_key = os.getenv('PUBLIC_KEY')
@@ -40,6 +46,7 @@ def dashboard(request):
     # bill_form.user = request.user
     # bill_form.tx_id = trx_ref
     # bill_form.save()
+    # print(user_form.fields)
     if request.method == 'POST':
         bill_form = BillForm(request.POST)
         if bill_form.is_valid():
@@ -56,10 +63,19 @@ def dashboard(request):
                 "c_name": request.user.get_full_name(),
                 "redirect_url" : site_url,
                 "tx_ref": form.tx_ref,
-                "amount": int(amount)
+                "amount": int(amount),
             }
-
+            
             return render(request, 'pages/form_to_checkout.html', params)
+
+        user_form = PasswordChangeForm(request.user, request.POST)
+        if user_form.is_valid():
+             user = user_form.save()
+             update_session_auth_hash(request, user)  # Important!
+            #  messages.success(request, 'Your password was successfully updated!')
+        else:
+            print("Not valid")
+
 
             # redirect_url = request.build_absolute_uri()
 
@@ -70,7 +86,9 @@ def dashboard(request):
         'form': bill_form,
         'tx_ref': trx_ref,
         'public_key': public_key,
-        'site_url': site_url
+        'site_url': site_url,
+        "user_bills": user_bills,
+        'user_form': user_form
     }
     return render(request, 'pages/dashboard.html', data)
 
