@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = bool(os.getenv('DEBUG'))
 
 if not DEBUG:
-    ALLOWED_HOSTS = ['143.198.158.39', 'redaid-nigeria.org', 'www.redaid-nigeria.org']
+    ALLOWED_HOSTS = ['143.198.158.39']
 else:
     ALLOWED_HOSTS = ['localhost']
 
