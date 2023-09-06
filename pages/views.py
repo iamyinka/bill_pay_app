@@ -33,7 +33,7 @@ def form_to_checkout(request):
 
 @login_required()
 def dashboard(request):
-    print(request.geo_data)
+    location = request.geo_data
     user_bills = Bill.objects.filter(user=request.user)
     user_form = PasswordChangeForm(user=request.user)
     bill_form = BillForm()
@@ -42,7 +42,7 @@ def dashboard(request):
     # site_url = request.build_absolute_uri() + "payment-status/"
     site_url = request.build_absolute_uri("payment-status/")
 
-    print(site_url)
+    # print(site_url)
     
     # bill_form.amount = int(bill_form.cleaned_data['amount'])
     # bill_form.user = request.user
@@ -91,7 +91,8 @@ def dashboard(request):
         'public_key': public_key,
         'site_url': site_url,
         "user_bills": user_bills,
-        'user_form': user_form
+        'user_form': user_form,
+        'location': location
     }
     return render(request, 'pages/dashboard.html', data)
 
