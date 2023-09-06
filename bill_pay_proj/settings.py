@@ -65,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'geoip2_extras.middleware.GeoIP2Middleware',
 ]
 
 ROOT_URLCONF = 'bill_pay_proj.urls'
@@ -207,6 +208,8 @@ if not DEBUG:    # Tell Django to copy statics to the `staticfiles` directory
     # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+GEOIP_PATH = os.path.join('geoip')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
