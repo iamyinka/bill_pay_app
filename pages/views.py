@@ -33,6 +33,7 @@ def form_to_checkout(request):
 
 @login_required()
 def dashboard(request):
+    print(request.geo_data)
     user_bills = Bill.objects.filter(user=request.user)
     user_form = PasswordChangeForm(user=request.user)
     bill_form = BillForm()
@@ -95,12 +96,14 @@ def dashboard(request):
     return render(request, 'pages/dashboard.html', data)
 
 
-def payment_status(request, status, tx_ref, transaction_id):
+def payment_status(request):
+    tx_ref = request.GET.tx_ref
+    status = request.GET.status
 
-    if tx_ref is not None and status is not None:
-        tx = Bill.objects.get(tx_ref=tx_ref)
-        tx.status = status
-        tx.tx_id = transaction_id
+    if request.GET.tx_ref is not None and request.GET.status is not None:
+        tx = Bill.objects.get(tx_ref=request.GET.tx_ref)
+        tx.status = request.GET.status
+        tx.tx_id = request.GET.transaction_id
         tx.save()
     else:
         return redirect('dashboard')
